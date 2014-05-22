@@ -67,8 +67,8 @@ private
         # FIXME: needs cmd
         # TODO: need to copy fake systemd-nspawn
         FileUtils.cp("#{File.dirname __FILE__}/netrunnerarch/systemd-nspawn", "#{chroot_path}/usr/local/bin/", :verbose=>true)
-#         FileUtils.cp("#{File.dirname __FILE__}/netrunnerarch/systemd-nspawn", "#{chroot_path}/usr/bin/", :verbose=>true)
-#         FileUtils.cp("#{File.dirname __FILE__}/netrunnerarch/systemd-nspawn", "#{chroot_path}/usr/sbin/", :verbose=>true)
+        FileUtils.cp("#{File.dirname __FILE__}/netrunnerarch/systemd-nspawn", "#{chroot_path}/usr/bin/", :verbose=>true)
+        FileUtils.cp("#{File.dirname __FILE__}/netrunnerarch/systemd-nspawn", "#{chroot_path}/usr/sbin/", :verbose=>true)
         p bind
         ENV.delete('SUDO_USER')
         ENV.delete('SUDO_UID')
@@ -93,6 +93,13 @@ private
         end
     end
 end
+
+# TODO: !!!!!!!!!!!!!!!!!!!
+# /usr/share/devtools/pacman-default.conf
+# before the core entry
+# [blueshell]
+# SigLevel = Optional TrustAll
+# Server=http://arch.netrunner-os.com/$arch
 
 # 1) Install Netrunnerarch in a VM
 # 2) Install the base-devel package
