@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+#--
+# Copyright (C) 2014 Harald Sitter <sitter@kde.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of
+# the License or (at your option) version 3 or any later version
+# accepted by the membership of KDE e.V. (or its successor approved
+# by the membership of KDE e.V.), which shall act as a proxy
+# defined in Section 14 of version 3 of the license.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#++
+
+require_relative 'config.rb'
+
+class Source
+    # Source name (i.e. directory name) [string]
+    attr_accessor :name
+    # Path to the source definition directory [string]
+    attr_reader :path
+    # Distributions for this source [array]
+    attr_accessor :distros
+    # Meta data [hash]
+    attr_accessor :meta_data
+
+    def path=(path_)
+        @path = path_
+        Dir.chdir(path) do
+            @distros = []
+            Dir['*'].each do |dir|
+                next unless File.directory?(dir)
+                @distros << dir.to_sym
+            end
+        end
+
+        # Load meta config
+        Dir.chdir(path) do
+            # FIXME: version construction needs to happen later somehow as we might need access to VCS data?
+            @meta_data = eval(File.read('./meta'))
+        end
+    end
+end
+
+def run()
+    pkg_git_dir = 'pkg_git'
+
+    unless File.exist?(pkg_git_dir)
+        %x[git clone #{Blue::Config[:pkg_git]} #{pkg_git_dir}]
+    end
+
+    sources = []
+    Dir.chdir(pkg_git_dir) do
+        %x[git pull]
+
+        directories = Dir['*'].reject{|o| not File.directory?(o)}
+        directories.each do |dir|
+            s = Source.new
+            s.name = dir
+            s.path = File.expand_path(dir)
+            sources << s
+        end
+    end
+    p sources
+
+    sources.each do |source|
+        source.distros.each do |distro|
+            p distro
+            next unless require_relative("targets/#{distro.to_s}")
+            begin
+                # :dist -> :Dist -> "Dist" -> "Dist.new(source)" -> eval
+                builder = eval distro.capitalize.to_s.concat('.new(source)')
+                builder.build()
+            rescue
+                 puts "  E: #{$!}"
+            end
+        end
+    end
+end
+
+run
