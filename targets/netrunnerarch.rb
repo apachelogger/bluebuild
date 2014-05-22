@@ -72,7 +72,7 @@ private
         p bind
         ENV.delete('SUDO_USER')
         ENV.delete('SUDO_UID')
-        system("chroot #{chroot_path}  sh -c 'cd #{bind} && { stable-x86_64-build; stable-i686-build'")
+        system("chroot #{chroot_path}  sh -c 'cd #{bind} && { stable-x86_64-build; stable-i686-build }'")
         ##
 
         system("umount '#{chroot_path}/#{bind}'")
