@@ -107,9 +107,7 @@ private
     end
 
     def build_in_chroot()
-        create_chroot()
-
-        Chroot chroot(chroot_path)
+        chroot = Chroot.new(chroot_path)
         chroot.setup()
         chroot.bind(build_path)
 
@@ -169,7 +167,7 @@ private
                 FileUtils.mkpath(repo_path)
                 FileUtils.cp(pkgtars, repo_path, :verbose => true)
                 Dir.chdir(repo_path) do
-                    Chroot chroot(chroot_path)
+                    chroot = Chroot.new(chroot_path)
                     chroot.setup()
                     chroot.bind(repo_path)
                     pkgtars.each do |pkgtar|
