@@ -182,6 +182,7 @@ private
                     chroot.teardown()
                 end
                 # TODO: extract logs and whatnot for publication
+                # TODO: publishing to proper archive is a separate step
                 # NOTE: packages are not signed intentionally apparently
             end
         end
