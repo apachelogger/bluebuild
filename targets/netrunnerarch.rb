@@ -71,6 +71,7 @@ class Chroot
             puts ":::unmount(#{path}#{mounted_path})"
             system("umount #{path}#{mounted_path}")
         end
+        p @mounted_paths
     end
 
 private
