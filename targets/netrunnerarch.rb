@@ -159,6 +159,7 @@ private
                         found = true if (pkgarch == File.basename(pkgtar, '.pkg.tar.xz').split('-').last.to_sym)
                         break if found
                     end
+                    next if found
                     # No match found, we are missing a build, oh my.
                     # FIXME: return error etc.
                     # TODO: should we return at all? maybe publish what we have instead?
