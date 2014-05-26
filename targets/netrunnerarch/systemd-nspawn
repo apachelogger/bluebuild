@@ -66,9 +66,9 @@ run("mount -o bind #{bind} '#{dir}/#{bind}'")
 
 run("chroot #{dir} #{ARGV.join(' ')}")
 
-run("umount '#{dir}/#{bind}'")
+run("umount -f -l '#{dir}/#{bind}'")
 
-run("umount '#{dir}/dev/pts'")
-run("umount '#{dir}/dev'")
-run("umount '#{dir}/sys'")
-run("umount '#{dir}/proc'")
+run("umount -f -l '#{dir}/dev/pts'")
+run("umount -f -l '#{dir}/dev'")
+run("umount -f -l '#{dir}/sys'")
+run("umount -f -l '#{dir}/proc'")
