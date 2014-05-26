@@ -150,6 +150,8 @@ private
 
                 pkgtars = Dir.glob('*.pkg.tar.xz')
 
+                p pkgarches
+                p pkgtars
                 # Check that there is a package for all defined architectures.
                 pkgarches.each do |pkgarch|
                     found = false
