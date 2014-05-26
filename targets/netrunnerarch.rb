@@ -68,7 +68,7 @@ class Chroot
 
     def teardown()
         @mounted_paths = mounted_paths.reverse.drop_while do |mounted_path|
-            puts ":::unmount(#{path}#{target_path})"
+            puts ":::unmount(#{path}#{mounted_path})"
             system("umount #{path}#{mounted_path}")
         end
     end
